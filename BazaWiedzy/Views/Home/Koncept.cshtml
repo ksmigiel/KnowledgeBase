@@ -1,0 +1,19 @@
+﻿@model IEnumerable<BazaWiedzy.Wiedza>
+
+@{
+    ViewBag.Title = ViewBag.Koncept;
+}
+
+<h2>@ViewBag.Koncept</h2>
+
+@foreach (var item in Model)
+{
+    if (item.IdR == 1)
+    {
+    <p>W @item.Koncept <i>@item.Relacje.Reverse</i> @Html.ActionLink(@item.Instrumenty.Nazwa, "Wiedza", new { id = item.Instrumenty.Id })</p>
+    }
+    else
+    {
+    <p>@item.Koncept <i>@item.Relacje.Reverse</i> @Html.ActionLink(@item.Instrumenty.Nazwa, "Wiedza", new { id = item.Instrumenty.Id })</p>
+    }
+}

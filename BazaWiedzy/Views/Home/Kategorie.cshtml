@@ -1,0 +1,12 @@
+﻿@model IEnumerable<BazaWiedzy.Kategorie>
+
+@{
+    ViewBag.Title = "Kategorie";
+}
+
+<h2>Kategorie</h2>
+
+@foreach (var item in Model)
+{
+    <p>@Html.ActionLink(item.Nazwa, "Instrumenty", new { id = item.IdK })</p>
+}

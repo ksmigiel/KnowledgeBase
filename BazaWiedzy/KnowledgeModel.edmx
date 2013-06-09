@@ -1,0 +1,403 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="NpoziomDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="NpoziomDBModelStoreContainer">
+          <EntitySet Name="Grupy" EntityType="NpoziomDBModel.Store.Grupy" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Instrumenty" EntityType="NpoziomDBModel.Store.Instrumenty" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Kategorie" EntityType="NpoziomDBModel.Store.Kategorie" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Relacje" EntityType="NpoziomDBModel.Store.Relacje" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="sysdiagrams" EntityType="NpoziomDBModel.Store.sysdiagrams" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Wiedza" EntityType="NpoziomDBModel.Store.Wiedza" store:Type="Tables" store:Schema="dbo" store:Name="Wiedza">
+            <DefiningQuery>SELECT 
+      [Wiedza].[IdI] AS [IdI], 
+      [Wiedza].[IdR] AS [IdR], 
+      [Wiedza].[Koncept] AS [Koncept]
+      FROM [dbo].[Wiedza] AS [Wiedza]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="BazaWiedzy" EntityType="NpoziomDBModel.Store.BazaWiedzy" store:Type="Views" store:Schema="dbo" store:Name="BazaWiedzy">
+            <DefiningQuery>SELECT 
+      [BazaWiedzy].[Nazwa] AS [Nazwa], 
+      [BazaWiedzy].[Relacja] AS [Relacja], 
+      [BazaWiedzy].[Koncept] AS [Koncept]
+      FROM [dbo].[BazaWiedzy] AS [BazaWiedzy]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Instrumenty_Kategorie" Association="NpoziomDBModel.Store.FK_Instrumenty_Kategorie">
+            <End Role="Kategorie" EntitySet="Kategorie" />
+            <End Role="Instrumenty" EntitySet="Instrumenty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kategorie_Grupy" Association="NpoziomDBModel.Store.FK_Kategorie_Grupy">
+            <End Role="Grupy" EntitySet="Grupy" />
+            <End Role="Kategorie" EntitySet="Kategorie" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wiedza_Instrumenty" Association="NpoziomDBModel.Store.FK_Wiedza_Instrumenty">
+            <End Role="Instrumenty" EntitySet="Instrumenty" />
+            <End Role="Wiedza" EntitySet="Wiedza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wiedza_Relacje" Association="NpoziomDBModel.Store.FK_Wiedza_Relacje">
+            <End Role="Relacje" EntitySet="Relacje" />
+            <End Role="Wiedza" EntitySet="Wiedza" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Grupy">
+          <Key>
+            <PropertyRef Name="IdG" />
+          </Key>
+          <Property Name="IdG" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Nazwa" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Instrumenty">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Nazwa" Type="nvarchar" MaxLength="50" />
+          <Property Name="KategoriaID" Type="int" />
+        </EntityType>
+        <EntityType Name="Kategorie">
+          <Key>
+            <PropertyRef Name="IdK" />
+          </Key>
+          <Property Name="IdK" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Nazwa" Type="nvarchar" MaxLength="50" />
+          <Property Name="IdG" Type="int" />
+        </EntityType>
+        <EntityType Name="Relacje">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Relacja" Type="nvarchar" MaxLength="50" />
+          <Property Name="Reverse" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="128" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'NpoziomDB.dbo.Wiedza' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="Wiedza">
+          <Key>
+            <PropertyRef Name="IdI" />
+            <PropertyRef Name="IdR" />
+            <PropertyRef Name="Koncept" />
+          </Key>
+          <Property Name="IdI" Type="int" Nullable="false" />
+          <Property Name="IdR" Type="int" Nullable="false" />
+          <Property Name="Koncept" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'NpoziomDB.dbo.BazaWiedzy' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="BazaWiedzy">
+          <Key>
+            <PropertyRef Name="Koncept" />
+          </Key>
+          <Property Name="Nazwa" Type="nvarchar" MaxLength="50" />
+          <Property Name="Relacja" Type="nvarchar" MaxLength="50" />
+          <Property Name="Koncept" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Instrumenty_Kategorie">
+          <End Role="Kategorie" Type="NpoziomDBModel.Store.Kategorie" Multiplicity="0..1" />
+          <End Role="Instrumenty" Type="NpoziomDBModel.Store.Instrumenty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kategorie">
+              <PropertyRef Name="IdK" />
+            </Principal>
+            <Dependent Role="Instrumenty">
+              <PropertyRef Name="KategoriaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kategorie_Grupy">
+          <End Role="Grupy" Type="NpoziomDBModel.Store.Grupy" Multiplicity="0..1" />
+          <End Role="Kategorie" Type="NpoziomDBModel.Store.Kategorie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grupy">
+              <PropertyRef Name="IdG" />
+            </Principal>
+            <Dependent Role="Kategorie">
+              <PropertyRef Name="IdG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wiedza_Instrumenty">
+          <End Role="Instrumenty" Type="NpoziomDBModel.Store.Instrumenty" Multiplicity="1" />
+          <End Role="Wiedza" Type="NpoziomDBModel.Store.Wiedza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instrumenty">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Wiedza">
+              <PropertyRef Name="IdI" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wiedza_Relacje">
+          <End Role="Relacje" Type="NpoziomDBModel.Store.Relacje" Multiplicity="1" />
+          <End Role="Wiedza" Type="NpoziomDBModel.Store.Wiedza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Relacje">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Wiedza">
+              <PropertyRef Name="IdR" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="NpoziomDBModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="NpoziomDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Instrumenty" EntityType="NpoziomDBModel.Instrumenty" />
+          <EntitySet Name="Relacje" EntityType="NpoziomDBModel.Relacje" />
+          <EntitySet Name="Wiedza" EntityType="NpoziomDBModel.Wiedza" />
+          <EntitySet Name="BazaWiedzy" EntityType="NpoziomDBModel.BazaWiedzy" />
+          <AssociationSet Name="FK_Wiedza_Instrumenty" Association="NpoziomDBModel.FK_Wiedza_Instrumenty">
+            <End Role="Instrumenty" EntitySet="Instrumenty" />
+            <End Role="Wiedza" EntitySet="Wiedza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wiedza_Relacje" Association="NpoziomDBModel.FK_Wiedza_Relacje">
+            <End Role="Relacje" EntitySet="Relacje" />
+            <End Role="Wiedza" EntitySet="Wiedza" />
+          </AssociationSet>
+          <EntitySet Name="Grupy" EntityType="NpoziomDBModel.Grupy" />
+          <EntitySet Name="Kategorie" EntityType="NpoziomDBModel.Kategorie" />
+          <EntitySet Name="sysdiagrams" EntityType="NpoziomDBModel.sysdiagrams" />
+          <AssociationSet Name="FK_Kategorie_Grupy" Association="NpoziomDBModel.FK_Kategorie_Grupy">
+            <End Role="Grupy" EntitySet="Grupy" />
+            <End Role="Kategorie" EntitySet="Kategorie" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Instrumenty_Kategorie" Association="NpoziomDBModel.FK_Instrumenty_Kategorie">
+            <End Role="Kategorie" EntitySet="Kategorie" />
+            <End Role="Instrumenty" EntitySet="Instrumenty" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Instrumenty">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nazwa" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Wiedza" Relationship="NpoziomDBModel.FK_Wiedza_Instrumenty" FromRole="Instrumenty" ToRole="Wiedza" />
+          <Property Type="Int32" Name="KategoriaID" />
+          <NavigationProperty Name="Kategorie" Relationship="NpoziomDBModel.FK_Instrumenty_Kategorie" FromRole="Instrumenty" ToRole="Kategorie" />
+        </EntityType>
+        <EntityType Name="Relacje">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Relacja" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Reverse" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Wiedza" Relationship="NpoziomDBModel.FK_Wiedza_Relacje" FromRole="Relacje" ToRole="Wiedza" />
+        </EntityType>
+        <EntityType Name="Wiedza">
+          <Key>
+            <PropertyRef Name="IdI" />
+            <PropertyRef Name="IdR" />
+            <PropertyRef Name="Koncept" />
+          </Key>
+          <Property Name="IdI" Type="Int32" Nullable="false" />
+          <Property Name="IdR" Type="Int32" Nullable="false" />
+          <Property Name="Koncept" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Instrumenty" Relationship="NpoziomDBModel.FK_Wiedza_Instrumenty" FromRole="Wiedza" ToRole="Instrumenty" />
+          <NavigationProperty Name="Relacje" Relationship="NpoziomDBModel.FK_Wiedza_Relacje" FromRole="Wiedza" ToRole="Relacje" />
+        </EntityType>
+        <EntityType Name="BazaWiedzy">
+          <Key>
+            <PropertyRef Name="Koncept" />
+          </Key>
+          <Property Name="Nazwa" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Relacja" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Koncept" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Wiedza_Instrumenty">
+          <End Type="NpoziomDBModel.Instrumenty" Role="Instrumenty" Multiplicity="1" />
+          <End Type="NpoziomDBModel.Wiedza" Role="Wiedza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instrumenty">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Wiedza">
+              <PropertyRef Name="IdI" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wiedza_Relacje">
+          <End Type="NpoziomDBModel.Relacje" Role="Relacje" Multiplicity="1" />
+          <End Type="NpoziomDBModel.Wiedza" Role="Wiedza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Relacje">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Wiedza">
+              <PropertyRef Name="IdR" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Grupy">
+          <Key>
+            <PropertyRef Name="IdG" />
+          </Key>
+          <Property Type="Int32" Name="IdG" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Nazwa" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Kategorie" Relationship="NpoziomDBModel.FK_Kategorie_Grupy" FromRole="Grupy" ToRole="Kategorie" />
+        </EntityType>
+        <EntityType Name="Kategorie">
+          <Key>
+            <PropertyRef Name="IdK" />
+          </Key>
+          <Property Type="Int32" Name="IdK" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Nazwa" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="IdG" />
+          <NavigationProperty Name="Grupy" Relationship="NpoziomDBModel.FK_Kategorie_Grupy" FromRole="Kategorie" ToRole="Grupy" />
+          <NavigationProperty Name="Instrumenty" Relationship="NpoziomDBModel.FK_Instrumenty_Kategorie" FromRole="Kategorie" ToRole="Instrumenty" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Type="String" Name="name" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="principal_id" Nullable="false" />
+          <Property Type="Int32" Name="diagram_id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="version" />
+          <Property Type="Binary" Name="definition" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Kategorie_Grupy">
+          <End Type="NpoziomDBModel.Grupy" Role="Grupy" Multiplicity="0..1" />
+          <End Type="NpoziomDBModel.Kategorie" Role="Kategorie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grupy">
+              <PropertyRef Name="IdG" />
+            </Principal>
+            <Dependent Role="Kategorie">
+              <PropertyRef Name="IdG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Instrumenty_Kategorie">
+          <End Type="NpoziomDBModel.Kategorie" Role="Kategorie" Multiplicity="0..1" />
+          <End Type="NpoziomDBModel.Instrumenty" Role="Instrumenty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kategorie">
+              <PropertyRef Name="IdK" />
+            </Principal>
+            <Dependent Role="Instrumenty">
+              <PropertyRef Name="KategoriaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="NpoziomDBModelStoreContainer" CdmEntityContainer="NpoziomDBEntities">
+          <EntitySetMapping Name="Instrumenty"><EntityTypeMapping TypeName="NpoziomDBModel.Instrumenty"><MappingFragment StoreEntitySet="Instrumenty">
+            <ScalarProperty Name="KategoriaID" ColumnName="KategoriaID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Relacje"><EntityTypeMapping TypeName="NpoziomDBModel.Relacje"><MappingFragment StoreEntitySet="Relacje">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Relacja" ColumnName="Relacja" />
+            <ScalarProperty Name="Reverse" ColumnName="Reverse" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Wiedza"><EntityTypeMapping TypeName="NpoziomDBModel.Wiedza"><MappingFragment StoreEntitySet="Wiedza">
+            <ScalarProperty Name="IdI" ColumnName="IdI" />
+            <ScalarProperty Name="IdR" ColumnName="IdR" />
+            <ScalarProperty Name="Koncept" ColumnName="Koncept" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="BazaWiedzy"><EntityTypeMapping TypeName="NpoziomDBModel.BazaWiedzy"><MappingFragment StoreEntitySet="BazaWiedzy">
+            <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+            <ScalarProperty Name="Relacja" ColumnName="Relacja" />
+            <ScalarProperty Name="Koncept" ColumnName="Koncept" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Grupy">
+            <EntityTypeMapping TypeName="NpoziomDBModel.Grupy">
+              <MappingFragment StoreEntitySet="Grupy">
+                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+                <ScalarProperty Name="IdG" ColumnName="IdG" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kategorie">
+            <EntityTypeMapping TypeName="NpoziomDBModel.Kategorie">
+              <MappingFragment StoreEntitySet="Kategorie">
+                <ScalarProperty Name="IdG" ColumnName="IdG" />
+                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+                <ScalarProperty Name="IdK" ColumnName="IdK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="NpoziomDBModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Model1">
+        <EntityTypeShape EntityType="NpoziomDBModel.Instrumenty" Width="1.5" PointX="0.5" PointY="0.75" Height="1.9802864583333331" IsExpanded="true" />
+        <EntityTypeShape EntityType="NpoziomDBModel.Relacje" Width="1.5" PointX="5.75" PointY="1.75" Height="1.787985026041667" IsExpanded="true" />
+        <EntityTypeShape EntityType="NpoziomDBModel.Wiedza" Width="1.5" PointX="3.125" PointY="1.625" Height="1.9802864583333326" IsExpanded="true" />
+        <EntityTypeShape EntityType="NpoziomDBModel.BazaWiedzy" Width="1.5" PointX="7.75" PointY="1.625" Height="1.5956835937499996" IsExpanded="true" />
+        <AssociationConnector Association="NpoziomDBModel.FK_Wiedza_Instrumenty" >
+          <ConnectorPoint PointX="2" PointY="2.1776432291666667" />
+          <ConnectorPoint PointX="3.125" PointY="2.1776432291666667" />
+        </AssociationConnector>
+        <AssociationConnector Association="NpoziomDBModel.FK_Wiedza_Relacje" >
+          <ConnectorPoint PointX="5.75" PointY="2.6439925130208337" />
+          <ConnectorPoint PointX="4.625" PointY="2.6439925130208337" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="NpoziomDBModel.Grupy" Width="1.5" PointX="2.75" PointY="5" Height="1.5956835937499996" />
+        <EntityTypeShape EntityType="NpoziomDBModel.Kategorie" Width="1.5" PointX="0.5" PointY="4" Height="1.9802864583333335" />
+        <EntityTypeShape EntityType="NpoziomDBModel.sysdiagrams" Width="1.5" PointX="7.375" PointY="4.375" Height="0.4" IsExpanded="false" />
+        <AssociationConnector Association="NpoziomDBModel.FK_Kategorie_Grupy" >
+          <ConnectorPoint PointX="2.75" PointY="5.4901432291666667" />
+          <ConnectorPoint PointX="2" PointY="5.4901432291666667" />
+        </AssociationConnector>
+        <AssociationConnector Association="NpoziomDBModel.FK_Instrumenty_Kategorie" >
+          <ConnectorPoint PointX="1.25" PointY="4" />
+          <ConnectorPoint PointX="1.25" PointY="2.7302864583333331" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

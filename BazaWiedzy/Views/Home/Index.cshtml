@@ -1,0 +1,14 @@
+﻿@model IEnumerable<BazaWiedzy.Grupy>
+
+@{
+    ViewBag.Title = "Baza wiedzy - Instrumenty";
+}
+
+<h2>Witaj w bazie wiedzy o instrumentach muzycznych</h2>
+<h3>Wybierz odpowiednią kategorię:</h3>
+
+
+@foreach (var item in Model)
+{
+    <p>@Html.ActionLink(item.Nazwa, "Kategorie", new { id = item.IdG })</p>
+}

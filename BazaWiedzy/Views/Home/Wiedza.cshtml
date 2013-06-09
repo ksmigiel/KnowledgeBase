@@ -1,0 +1,33 @@
+﻿@model BazaWiedzy.Instrumenty
+@{
+    ViewBag.Title = ViewBag.Instrument;
+}
+
+<h2>@Model.Nazwa</h2>
+
+@Html.DropDownList("RelacjeId", String.Empty)
+
+<div id="results">
+
+</div>
+
+<script type="text/javascript">
+    // Simple AJAX with jQuery for dropdown
+    $(document).ready(function ($) {
+        $("#RelacjeId").change(function () {
+            //var relacja = $(":selected", this).text();
+            var idI = '@Model.Id';
+            var idR = this.value;
+
+            $.ajax({
+                url: "/Home/WiedzaAJAXResult/?idI=" + idI + "&idR=" + idR,
+                cache: false
+            }).done(function (html) {
+                $("#results").empty();
+                $.each(html, function (i, value) {
+                    $("#results").append("<p><a href='/Home/Koncept/?koncept=" + value + "'>" + value + "<a/></p>");
+                });
+            });
+        });
+    });
+</script>
